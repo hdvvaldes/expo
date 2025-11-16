@@ -36,7 +36,43 @@
 
 \begin{document}
 
-  Informacion sobre el tema junto con sus fuentes.
+  \section{Que son?}
+    Coleccion de cero o mas elementos.
+    Cada elemento tiene prioridad o valor.
+  \section{Operaciones Basicas}
+    \begin{enumerate}
+      \item getMin()
+        O(1)
+      \item getMax()
+        O(1)
+      \item put(x)
+        insert x into the DEPQ
+        O(log n)
+      \item removeMin()
+        O(log n)
+      \item removeMax()
+        O(log n)
+    \end{enumerate}
+    \textbf{Muchas estruturas de datos han sido propuestas para interpretar un DEPQ}
+    \section{Implementaciones}
+    \subsection{Symmetric Min-Max Heaps}
+      \textbf{Creadores:} \\
+      Arvind y Pandu Rangan
+      Es un arbol binario completo, T. T cumple con lo siguiente:
+      \begin{itemize}
+        \item La raiz es vacia.
+        \item $\forall v \in V(T), v tiene hermano derecho$, el elemento en v es menor o igual al de su hermano derecho.
+        \item $\forall v \in V(T), v tiene abuelo$, el elemento en el hijo izquierdo del abuelo es menor o igual al elemento en v.
+        \item $\forall v \in V(T), v tiene abuelo$, el elemento en el hijo derecho del abuelo es mayor o igual al elemento en v.
+      \end{itemize}
+
+      \textbf{Observaciones:}
+      \begin{itemize}
+        \item El numero de nodos es n+1.
+      \end{itemize}
+
+    
+
 
 \end{document}
 
