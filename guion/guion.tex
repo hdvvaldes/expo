@@ -1,42 +1,235 @@
-\documentclass[10pt]{article}
+\documentclass[11pt]{article}
 
-\usepackage{fancyhdr}
-\usepackage{extramarks}
-\usepackage{amssymb}
-\usepackage{enumerate}
-\usepackage{amsmath}
-\usepackage{graphicx}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{enumitem}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
 
-%
-% Basic Document Settings
-%
-
-\topmargin=-0.45in
-\evensidemargin=0in
-\oddsidemargin=0in
-\textwidth=6.5in
-\textheight=9.0in
-\headsep=0.25in
-
-\linespread{1.1}
-
-\pagestyle{fancy}
-\rhead{\firstxmark}
-\lfoot{\lastxmark}
-\cfoot{\thepage}
-
-\renewcommand\headrulewidth{0.4pt}
-\renewcommand\footrulewidth{0.4pt}
-
-\setlength\parindent{0pt}
-
-%
-% Create Problem Sections
-%
+\title{Temario:\\
+Double-Ended Priority Queues}
+\author{Estructuras de Datos Avanzadas}
+\date{}
 
 \begin{document}
+\maketitle
 
-  Notas generales sobre la estructura de la presentacion
+\section{Introducción:}
+
+En esta parte damos el contexto general para que se entienda por qué existen las double-ended priority queues.
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Repaso rápido de una \textit{priority queue} normal.
+    \begin{itemize}
+        \item Definición básica.
+        \item Operaciones clásicas: \texttt{getMin}/\texttt{getMax}, \texttt{insert}, \texttt{deleteMin}/\texttt{deleteMax}.
+    \end{itemize}
+    \item Motivación de las \textbf{double-ended priority queues (DEPQ)}.
+    \begin{itemize}
+        \item Limitaciones de una cola de prioridad de un solo extremo.
+        \item Casos donde necesitamos acceder al mínimo y al máximo de forma eficiente.
+    \end{itemize}
+\end{itemize}
+
+\section{Definición formal de una DEPQ}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Modelo abstracto.
+    \begin{itemize}
+        \item Conjunto de elementos con una prioridad o valor.
+        \item Operaciones principales:
+        \begin{itemize}
+            \item \texttt{getMin}, \texttt{getMax}
+            \item \texttt{insert} / \texttt{put}
+            \item \texttt{removeMin}, \texttt{removeMax}
+        \end{itemize}
+    \end{itemize}
+    \item Objetivo de diseño (de forma ideal).\\
+    Aclarar que el objetivo típico es de usar una DEPQ ES:
+    \begin{itemize}
+        \item \texttt{getMin} y \texttt{getMax} en $O(1)$.
+        \item Inserciones y borrados en $O(\log n)$.
+        \item Uso de memoria en $O(n)$.
+    \end{itemize}
+\end{itemize}
+
+\section{Aplicación: QuickSort externo}
+
+Aquí explicamos una aplicación concreta para que no se vea tan abstracto.
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Recordatorio rápido de QuickSort interno.
+    \begin{itemize}
+        \item Explicar en palabras simples qué es quicksort interno (en memoria) y su idea de pivot, subarreglo izquierdo, pivot, subarreglo derecho
+    \end{itemize}
+    \item Problema cuando los datos están en disco (QuickSort externo).\\
+    Describir el problema cuando los datos no caben en memoria.
+    \item Uso de una DEPQ en QuickSort externo.\\
+    Contar la idea general del external quicksort usando una DEPQ
+    \begin{itemize}
+        \item La DEPQ guarda un “grupo medio” que sí cabe en memoria.
+        \item Elementos muy pequeños se van a $L$, muy grandes a $R$.
+        \item Los que caen “entre” el min y el max de la DEPQ se manejan con intercambios.
+    \end{itemize}
+\end{itemize}
+
+\section{Visión general de implementaciones de DEPQ}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Idea general: casi todas se basan en \textit{heaps} (árboles binarios completos).
+    \item Objetivo común:
+    \begin{itemize}
+        \item \texttt{getMin}/\texttt{getMax} en $O(1)$.
+        \item \texttt{insert}, \texttt{removeMin}, \texttt{removeMax} en $O(\log n)$.
+    \end{itemize}
+    \item Estructuras que voy a mencionar:
+    \begin{itemize}
+        \item Symmetric Min-Max Heaps.
+        \item Interval Heaps.
+        \item Min-Max Heaps.
+        \item Deaps.
+    \end{itemize}
+\end{itemize}
+
+\section{Symmetric Min-Max Heaps (SMMH)}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Representación.
+    \begin{itemize}
+        \item Árbol binario completo.
+        \item La raíz está vacía, los demás nodos tienen un elemento.
+    \end{itemize}
+    \item Propiedades clave (relaciones entre hijos y abuelos).
+    \item Localización de mínimos y máximos.
+    \begin{itemize}
+        \item \texttt{getMin}: hijo izquierdo de la raíz.
+        \item \texttt{getMax}: hijo derecho de la raíz.
+    \end{itemize}
+    \item Idea general de las operaciones.
+    \begin{itemize}
+        \item Inserción: “burbujear” hacia arriba manteniendo las propiedades.
+        \item \texttt{removeMin}/\texttt{removeMax}: variantes de \textit{trickle down} de heaps.
+    \end{itemize}
+\end{itemize}
+
+\section{Interval Heaps}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Definición intuitiva.
+    \begin{itemize}
+        \item Cada nodo guarda un intervalo $[a, b]$ con $a \leq b$.
+        \item Los hijos representan intervalos contenidos en el del padre.
+    \end{itemize}
+    \item Conexión con heaps.
+    \begin{itemize}
+        \item Extremos izquierdos forman un min-heap.
+        \item Extremos derechos forman un max-heap.
+    \end{itemize}
+    \item \texttt{getMin}/\texttt{getMax}:
+    \begin{itemize}
+        \item Min: extremo izquierdo de la raíz.
+        \item Max: extremo derecho de la raíz.
+    \end{itemize}
+    \item Idea de inserción y eliminación.
+    \begin{itemize}
+        \item Dependiendo de si el nuevo valor cae dentro o fuera del intervalo del padre.
+        \item Reacomodo usando la lógica de min-heap o max-heap según el caso.
+    \end{itemize}
+\end{itemize}
+
+\section{Min-Max Heaps}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Idea general.
+    \begin{itemize}
+        \item Árbol binario completo con niveles alternados:
+        \begin{itemize}
+            \item Niveles min: el nodo es el mínimo de su subárbol.
+            \item Niveles max: el nodo es el máximo de su subárbol.
+        \end{itemize}
+    \end{itemize}
+    \item Localización de mínimos y máximos.
+    \begin{itemize}
+        \item Min: en la raíz.
+        \item Max: en uno de los hijos de la raíz.
+    \end{itemize}
+    \item Operaciones básicas.
+    \begin{itemize}
+        \item Inserción con \textit{trickle-up} usando reglas de min-heap o max-heap según el nivel.
+        \item Eliminación con \textit{trickle-down} comparando con hijos y nietos.
+    \end{itemize}
+\end{itemize}
+
+\section{Deaps}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Definición.
+    \begin{itemize}
+        \item Árbol binario completo con raíz vacía.
+        \item Subárbol izquierdo: min-heap.
+        \item Subárbol derecho: max-heap.
+    \end{itemize}
+    \item Propiedad de correspondencia.
+    \begin{itemize}
+        \item Cada nodo del lado min tiene un nodo correspondiente del lado max.
+        \item El valor en el min-heap es $\leq$ al valor del nodo correspondiente del max-heap.
+    \end{itemize}
+    \item \texttt{getMin}/\texttt{getMax}.
+    \begin{itemize}
+        \item Min: raíz del min-heap (hijo izquierdo).
+        \item Max: raíz del max-heap (hijo derecho).
+    \end{itemize}
+    \item Idea de inserción y eliminación.
+\end{itemize}
+
+\section{Métodos genéricos para construir DEPQs}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Dual priority queues.
+    \begin{itemize}
+        \item Mantener dos colas de prioridad: una min y una max.
+        \item Cada elemento está en ambas, con punteros de correspondencia.
+    \end{itemize}
+    \item Total correspondence.
+    \item Leaf correspondence.
+    \begin{itemize}
+        \item Solo se relacionan las hojas de cada heap.
+        \item Sirve para estructuras tipo leftist heaps, pairing heaps, etc.
+    \end{itemize}
+\end{itemize}
+
+\section{Meldable DEPQs (MDEPQ)}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Nueva operación: \texttt{meld(Q1, Q2)}.
+    \begin{itemize}
+        \item Combinar dos DEPQs en una sola.
+    \end{itemize}
+    \item Cuándo importa tener \texttt{meld}.
+    \begin{itemize}
+        \item Algoritmos donde se fusionan muchas colas de prioridad.
+    \end{itemize}
+    \item Ideas de implementación.
+    \begin{itemize}
+        \item Adaptar leftist heaps, pairing heaps, Fibonacci heaps, etc., al caso doble.
+    \end{itemize}
+\end{itemize}
+
+\section{Cierre}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Tabla o resumen (para la diapositiva final).
+    \begin{itemize}
+        \item Complejidades de cada estructura.
+        \item Qué tan difícil es implementar cada una.
+        \item Si soportan o no \texttt{meld}.
+    \end{itemize}
+    \item Comentarios finales.
+    \begin{itemize}
+        \item Cuándo vale la pena usar una DEPQ.
+        \item Qué implementación recomendaría yo en la práctica y por qué.
+    \end{itemize}
+\end{itemize}
 
 \end{document}
-
