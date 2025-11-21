@@ -1,6 +1,6 @@
+package mx.unam.ciencias.expo.implementations;
 
-package mx.unam.ciencias.expo;
-
+import mx.unam.ciencias.expo.DoubleEndedQueue;
 
 public class MinMaxHeap<T> extends DoubleEndedQueue<T>{
 

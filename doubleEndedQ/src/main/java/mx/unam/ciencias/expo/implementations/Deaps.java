@@ -1,5 +1,6 @@
-package mx.unam.ciencias.expo;
+package mx.unam.ciencias.expo.implementations;
 
+import mx.unam.ciencias.expo.DoubleEndedQueue;
 
 public class Deaps<T> extends DoubleEndedQueue<T>{
 

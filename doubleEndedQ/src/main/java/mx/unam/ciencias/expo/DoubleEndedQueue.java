@@ -1,7 +1,6 @@
 package mx.unam.ciencias.expo;
 
 
-
 public class DoubleEndedQueue<T> {
 
     public interface BodyDoubleEndedQueue<T> {
@@ -50,6 +49,11 @@ public class DoubleEndedQueue<T> {
         this.body = body;
 
     }
+
+    public DoubleEndedQueue() {
+        this.body = null;
+    }
+
 
     /**********  Methods ************/    
     

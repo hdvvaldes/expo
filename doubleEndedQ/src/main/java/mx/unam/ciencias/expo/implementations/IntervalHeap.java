@@ -1,7 +1,10 @@
-package mx.unam.ciencias.expo;
+package mx.unam.ciencias.expo.implementations;
+
+import mx.unam.ciencias.expo.DoubleEndedQueue;
 
 
 public class IntervalHeap<T> extends DoubleEndedQueue<T>{
+    
 
     public void put(T t) {
 
