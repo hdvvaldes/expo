@@ -1,8 +1,22 @@
 package mx.unam.ciencias.expo.implementations;
 
-import mx.unam.ciencias.expo.DoubleEndedQueue;
+import mx.unam.ciencias.expo.DoubleEndedQueue.BodyDoubleEndedQueue;
+import mx.unam.ciencias.expo.binaryTree.*;
 
-public class SymmetricMMHeap<T> extends DoubleEndedQueue<T>{
+public class SymmetricMMHeap<T> implements BodyDoubleEndedQueue<T>{
+
+    
+
+
+
+
+    public T getMin(){
+        return null;
+    }
+
+    public T getMax(){
+        return null;
+    }
 
     public void put(T t) {
 

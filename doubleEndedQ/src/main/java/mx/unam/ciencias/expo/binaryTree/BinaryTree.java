@@ -1,7 +1,7 @@
 package mx.unam.ciencias.expo.binaryTree;
 
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
-
 
 public class BinaryTree<T> {
 
@@ -70,6 +70,111 @@ public class BinaryTree<T> {
             return element.toString();
         }
     }
+    
+    private Node root;
+
+    protected int elements;
+
+    public BinaryTree() {}
+
+
+    /**
+     * Construye un árbol binario a partir de una colección. El árbol binario
+     * tendrá los mismos elements que la colección recibida.
+     * @param coleccion la colección a partir de la cual creamos el árbol
+     *        binario.
+     */
+    public BinaryTree(Iterable<T> iterable) {
+        for(T t:iterable)
+            add(t);
+    }
+
+    protected Node newNode(T elemento) {
+        return new Node(elemento);
+    }
+
+    public int getElements() {
+        return elements;
+    }
+
+    public boolean contains(T elemento) {
+        return find(elemento) != null;
+    }
+
+    public void add(T elemento) {
+        if(elemento == null)
+            throw new IllegalArgumentException("Elemento null");
+        if(isEmpty())
+            root = newNode(elemento);
+        else {
+            String b = binaryNumber(elements+1);
+            Node r = incompleteVertice(b), 
+                    v = newNode(elemento) ;
+            v.parent = r;
+            if((elements&1) == 0)
+                r.right = v;
+            else 
+                r.left = v;
+        }
+        elements++;
+    }
+
+    public BinaryTreeNode<T> find(T elemento) {
+        if(isEmpty()||elemento == null)
+            return null;
+        LinkedList<BinaryTreeNode<T>> queue = new LinkedList<>();
+        BinaryTreeNode<T> v;
+        queue.addFirst(root);
+        while (!queue.isEmpty()) {
+            v = queue.removeLast();
+            if(v.get().equals(elemento))
+                return v;
+            if(v.left() != null)
+                queue.addFirst(v.left());
+            if(v.right() != null)
+                queue.addFirst(v.right());
+        }
+        return null;
+    }
+
+    public BinaryTreeNode<T> root() {
+        if(isEmpty())
+            throw new NoSuchElementException("El arbol es vacio");
+        return root;
+        
+    }
+
+    public boolean isEmpty() {
+        return elements == 0;
+    }
+
+    public void clean() {
+        root = null;
+        elements = 0;
+    }
+
+    private String binaryNumber(int n){
+        String b = "";
+        while (n > 0) {
+            b = (n&1) + b;
+            n = n >> 1;
+        }
+        return b;
+    }
+
+    private Node incompleteVertice(String s){
+        if(isEmpty())
+            return null;
+        Node v = root;
+        for(int i = 1; i < s.length()-1; i++)
+            if(s.charAt(i) == '1')
+                v = v.right;
+            else 
+                v = v.left;
+        return v;
+    }
+
+
 
 
 }
