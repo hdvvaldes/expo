@@ -89,27 +89,31 @@ public class BinaryTree<T> {
             add(t);
     }
 
-    protected Node newNode(T elemento) {
-        return new Node(elemento);
+    protected Node newNode(T element) {
+        return new Node(element);
+    }
+
+    public int size() {
+        return elements;
     }
 
     public int getElements() {
         return elements;
     }
 
-    public boolean contains(T elemento) {
-        return find(elemento) != null;
+    public boolean contains(T element) {
+        return find(element) != null;
     }
 
-    public void add(T elemento) {
-        if(elemento == null)
-            throw new IllegalArgumentException("Elemento null");
+    public void add(T element) {
+        if(element == null)
+            throw new IllegalArgumentException("element null");
         if(isEmpty())
-            root = newNode(elemento);
+            root = newNode(element);
         else {
             String b = binaryNumber(elements+1);
-            Node r = incompleteVertice(b), 
-                    v = newNode(elemento) ;
+            Node r = incompleteNode(b), 
+                    v = newNode(element) ;
             v.parent = r;
             if((elements&1) == 0)
                 r.right = v;
@@ -119,15 +123,34 @@ public class BinaryTree<T> {
         elements++;
     }
 
-    public BinaryTreeNode<T> find(T elemento) {
-        if(isEmpty()||elemento == null)
+    public void remove(T element) {
+        Node v = (Node)find(element);
+        Node u = incompleteNode(binaryNumber(elements));
+        if(v == null)
+            return;
+        if(elements-- == 1)
+            root = null;
+        else if((elements&1) == 1){
+            v.element = u.left.element;
+            u.left.parent = null;
+            u.left = null;
+        } else {
+            v.element = u.right.element;
+            u.right.parent = null;
+            u.right = null;
+        }
+    }
+
+
+    public BinaryTreeNode<T> find(T element) {
+        if(isEmpty()||element == null)
             return null;
         LinkedList<BinaryTreeNode<T>> queue = new LinkedList<>();
         BinaryTreeNode<T> v;
         queue.addFirst(root);
         while (!queue.isEmpty()) {
             v = queue.removeLast();
-            if(v.get().equals(elemento))
+            if(v.get().equals(element))
                 return v;
             if(v.left() != null)
                 queue.addFirst(v.left());
@@ -162,7 +185,7 @@ public class BinaryTree<T> {
         return b;
     }
 
-    private Node incompleteVertice(String s){
+    private Node incompleteNode(String s){
         if(isEmpty())
             return null;
         Node v = root;
