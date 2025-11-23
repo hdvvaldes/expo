@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.rules.Timeout;
 
 import mx.unam.ciencias.expo.binaryTree.BinaryTree;
-import mx.unam.ciencias.expo.binaryTree.BinaryTreeNode;
 
 /**
  * Unit Test for the class{@link BinaryTree}.
@@ -44,22 +43,21 @@ public class TestBinaryTree {
     public void testConstructorWithElements() {
         LinkedList<Integer> list = new LinkedList<>();
         int n = getRandomInt();
-        for(int i = 0; i <= n; ++i)
+        for(int i = 0; i < n; ++i)
             list.add(i);
         BinaryTree<Integer> tree = new BinaryTree<>(list);
         Assert.assertTrue(tree.size() == n);
-        for(int i = 0; i <= n; ++i){
-            BinaryTreeNode<Integer> root = tree.root();
-            Assert.assertTrue(root != null);
-            Assert.assertTrue(root.get() == i);
-        }
+        LinkedList<Integer> orderTester = new LinkedList<>();
+        for(Integer i: tree) 
+            orderTester.add(i);
+        Assert.assertTrue(list.equals(orderTester));
     }
 
     @Test 
     public void testAdd() {
         BinaryTree<Integer> tree = new BinaryTree<>();
         int expectedSize = getRandomInt();
-        for(int i = 0; i <= expectedSize; ++i){
+        for(int i = 0; i < expectedSize; ++i){
             Assert.assertTrue(tree.size() == i);
             int element = getRandomInt();
             tree.add(element);
@@ -72,8 +70,11 @@ public class TestBinaryTree {
     public void testRemove() {
         LinkedList<Integer> list = new LinkedList<>();
         int n = getRandomInt();
-        for(int i = 0; i <= n; i++) {
-            list.add(getRandomInt());
+        for(int i = 0; i < n; i++) {
+            int element = getRandomInt();
+            while(list.contains(element))
+                element = getRandomInt();
+            list.add(element);
         }
         BinaryTree<Integer> tree = new BinaryTree<>(list);
         while(!list.isEmpty()) { 

@@ -2,7 +2,11 @@ package mx.unam.ciencias.expo.binaryTree;
 
 
 public interface BinaryTreeNode<T>{
+
+    public boolean hasRight();
     
+    public boolean hasLeft();
+
     /*
      * Returns the left son of the current node.
      *

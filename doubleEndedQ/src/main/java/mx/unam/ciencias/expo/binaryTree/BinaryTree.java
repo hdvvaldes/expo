@@ -1,9 +1,38 @@
 package mx.unam.ciencias.expo.binaryTree;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
-public class BinaryTree<T> {
+public class BinaryTree<T> implements Iterable<T>  {
+
+    private class BTreeIterator implements Iterator<T> {
+        
+        private LinkedList<Node> queue;
+
+        private BTreeIterator() {
+            queue = new LinkedList<>();
+            if(!isEmpty())
+                queue.add(root);
+        }
+
+        /* Nos dice si hay un elemento siguiente. */
+        @Override 
+        public boolean hasNext() {
+            return !queue.isEmpty();
+        }
+
+        /* Regresa el siguiente elemento en orden BFS. */
+        @Override 
+        public T next() {
+            if(queue.peek().hasLeft())
+                queue.addLast(queue.peek().left);
+            if(queue.peek().hasRight())
+                queue.addLast(queue.peek().right);
+            return queue.removeFirst().element;
+        }
+
+    }
 
     protected class Node implements BinaryTreeNode<T> {
         
@@ -19,6 +48,16 @@ public class BinaryTree<T> {
             if (element == null)
                 throw new IllegalArgumentException();
             this.element = element;
+        }
+
+        @Override
+        public boolean hasLeft(){
+            return left != null;
+        }
+
+        @Override
+        public boolean hasRight(){
+            return right != null;
         }
 
         @Override
@@ -152,9 +191,9 @@ public class BinaryTree<T> {
             v = queue.removeLast();
             if(v.get().equals(element))
                 return v;
-            if(v.left() != null)
+            if(v.hasLeft())
                 queue.addFirst(v.left());
-            if(v.right() != null)
+            if(v.hasRight())
                 queue.addFirst(v.right());
         }
         return null;
@@ -174,6 +213,11 @@ public class BinaryTree<T> {
     public void clean() {
         root = null;
         elements = 0;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new BTreeIterator();
     }
 
     private String binaryNumber(int n){
@@ -196,7 +240,8 @@ public class BinaryTree<T> {
                 v = v.left;
         return v;
     }
-
+    
+    
 
 
 
