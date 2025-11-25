@@ -1,80 +1,80 @@
 package mx.unam.ciencias.expo.test;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Set;
+
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 
+import mx.unam.ciencias.expo.DoubleEndedQueue;
 import mx.unam.ciencias.expo.binaryTree.BinaryTree;
+import mx.unam.ciencias.expo.implementations.SymmetricMMHeap;
 
 /**
  * Unit Test for the class{@link BinaryTree}.
  */
-public class TestBinaryTree {
+public class TestSMMH {
 
-    
     private Random random = new Random();
 
     /* Upper Bound to generate a random int */
-    private int upperBound = 100;
-
+    private int sizeBound = 100;
+    
+    private int elementBound = 1000;
 
     /** Expiration rule */
     @Rule 
     public Timeout timeout = Timeout.seconds(5);
 
-    /** Testing Constructor*/
-    
-    /* Test empty constructor */
 
-    @Test
-    public void testEmptyConstructor() {
-        BinaryTree<Integer> tree = new BinaryTree<>();
-        Assert.assertTrue(tree.isEmpty());
-        Assert.assertEquals(0, tree.size());
-    }
+    /** Testing Constructor*/
     
     /* Test constructor with elements */
 
-
     @Test
     public void testConstructorWithElements() {
-        LinkedList<Integer> list = new LinkedList<>();
-        int n = getRandomInt();
-        for(int i = 0; i < n; ++i)
-            list.add(i);
-        BinaryTree<Integer> tree = new BinaryTree<>(list);
-        Assert.assertTrue(tree.size() == n);
-        LinkedList<Integer> orderTester = new LinkedList<>();
-        for(Integer i: tree) 
-            orderTester.add(i);
-        Assert.assertTrue(list.equals(orderTester));
+        int n = random.nextInt(sizeBound);
+        Set<Integer> set = new HashSet<>();
+        while(set.size() < n)
+            set.add(random.nextInt(elementBound));
+        SymmetricMMHeap<Integer> smmhh = new SymmetricMMHeap<>(set);
+        Assert.assertTrue(depq.size() == n);
+        validDPQueue(depq);
+    }
+
+    @Test
+    public void testAdd() {
+        
+
+    }
+
+    @Test
+    public void testRemove() {
+
     }
 
     @Test 
     public void testAdd() {
-        BinaryTree<Integer> tree = new BinaryTree<>();
+        SymmetricMMHeap<Integer> depq = new SymmetricMMHeap<>();
         int expectedSize = getRandomInt();
         for(int i = 0; i < expectedSize; ++i){
-            Assert.assertTrue(tree.size() == i);
+            Assert.assertTrue(depq.size() == i);
             int element = getRandomInt();
-            tree.add(element);
-            Assert.assertTrue(tree.contains(element));
+            depq.add(element);
+            Assert.assertTrue(depq.contains(element));
+            validDPQueue(depq)
         }
-        Assert.assertTrue(tree.size() == expectedSize);
+        Assert.assertTrue(depq.size() == expectedSize);
     }
 
     @Test
     public void testRemove() {
         LinkedList<Integer> list = new LinkedList<>();
         int n = getRandomInt();
-        while(list.size() < n){
-            int element = getRandomInt();
-            if(!list.contains(element))
-                list.add(element);
-        }
         for(int i = 0; i < n; i++) {
             int element = getRandomInt();
             while(list.contains(element))
@@ -99,5 +99,9 @@ public class TestBinaryTree {
     private int getRandomInt() {
         return random.nextInt(upperBound);
     }
+
+    
+
+
 
 }
