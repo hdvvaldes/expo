@@ -1,57 +1,12 @@
 package mx.unam.ciencias.expo;
 
-public class DoubleEndedQueue<T> {
+public abstract class DoubleEndedQueue<T extends Comparable<T>> {
 
-    public interface BodyDoubleEndedQueue<T> {
-
-        /*
-         * Inserts an element into the double ended queue.
-         * @param t the element to insert.
-         *
-         */
-        public void put(T t);
-
-        /*
-         * Removes and returns the minimum element in the double ended queue.
-         * @return the minimum element in the double ended queue.
-         *
-         */
-        public T removeMin();
-
-        /*
-         * Removes and returns the maximum element in the double ended queue.
-         * @return the maximum element in the double ended queue.
-         *
-         */
-        public T removeMax();
-        /*
-         * Returns the minimum element in the double ended queue.
-         * @return the minimum element in the double ended queue.
-         *
-         */
-        public T getMin();
-
-        /*
-         * Returns the maximum element in the double ended queue.
-         * @return the maximum element in the double ended queue.
-         *
-         */
-        public T getMax();
-
-    }
-    
     /* Fields */
 
-    private BodyDoubleEndedQueue<T> body;
+    private T min, max;
 
-    public DoubleEndedQueue(BodyDoubleEndedQueue<T> body) {
-        this.body = body;
-    }
-
-    public DoubleEndedQueue() {
-        this.body = null;
-    }
-
+    private int elements;
 
     /**********  Methods ************/    
     
@@ -61,7 +16,7 @@ public class DoubleEndedQueue<T> {
      *
      */
     public T getMin() { 
-        return body.getMin(); 
+        return min;
     }
 
     /*
@@ -70,34 +25,37 @@ public class DoubleEndedQueue<T> {
      *
      */
     public T getMax() { 
-        return body.getMax(); 
+        return max;
     }
+
+    /* Returns the elements in the DEPQ 
+     * 
+     * @return the elements in the DEPQ
+     */
+    public int size() {
+        return elements;
+    }
+
 
     /*
      * Inserts an element into the double ended queue.
      * @param t the element to insert.
      *
      */
-    public void put(T t){
-        body.put(t);
-    }
+    public abstract void put(T t);
 
     /*
      * Removes and returns the minimum element in the double ended queue.
      * @return the minimum element in the double ended queue.
      *
      */
-    public T removeMin() {
-        return body.removeMin();
-    }
+    public abstract T removeMin();
 
     /*
      * Removes and returns the maximum element in the double ended queue.
      * @return the maximum element in the double ended queue.
      *
      */
-    public T removeMax(){
-        return body.removeMax();
-    }
+    public abstract T removeMax();
 
 }
